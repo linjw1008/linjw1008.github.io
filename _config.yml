@@ -7,7 +7,7 @@ title: LinJW's Web
 subtitle:
 description:
 author: Jiawei Lin
-language: zh-CN
+language: zh-Hans
 timezone: Asia/Shanghai
 
 # URL
@@ -77,4 +77,6 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: git
+  repository: git@github.com:linjw1008/linjw1008.github.io.git
+  branch: master
