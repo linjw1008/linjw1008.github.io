@@ -9,6 +9,7 @@ categories:
 # 问题表现
 在windows系统下，`github.com`无法通过浏览器访问，无法在命令提示符（cmd）中ping通。
 <!-- more -->
+
 # 解决方法
 1. 通过域名查询网站，查询`github.com`对应的ip地址。
 * 推荐网站1：https://ip.chinaz.com/github.com
@@ -21,3 +22,4 @@ categories:
 ```
 3. 清空DNS缓存
 在cmd中执行`ipconfig /flushdns`命令。
+

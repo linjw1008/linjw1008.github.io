@@ -6,6 +6,8 @@
     "version": "3.8.0"
   },
   "dependencies": {
+    "ajv": "^6.9.1",
+    "eslint": "^4.12.1",
     "hexo": "^3.2.0",
     "hexo-deployer-git": "^1.0.0",
     "hexo-generator-archive": "^0.1.4",
@@ -14,6 +16,7 @@
     "hexo-generator-index": "^0.2.1",
     "hexo-generator-sitemap": "^1.2.0",
     "hexo-generator-tag": "^0.2.0",
+    "hexo-math": "^4.0.0",
     "hexo-renderer-ejs": "^0.3.0",
     "hexo-renderer-kramed": "^0.1.4",
     "hexo-renderer-mathjax": "^0.6.0",
