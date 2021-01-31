@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="人工神经网络,Matlab,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最近一门人工神经网络的课程结课，利用Matlab做了一个小Project，在此分享。">
+<meta name="keywords" content="人工神经网络,Matlab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于CHNN的旅行商问题">
+<meta property="og:url" content="https://linjw1008.top/2019/03/02/基于CHNN的旅行商问题/index.html">
+<meta property="og:site_name" content="LinJW&#39;s Web">
+<meta property="og:description" content="最近一门人工神经网络的课程结课，利用Matlab做了一个小Project，在此分享。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://linjw1008.top/2019/03/02/基于CHNN的旅行商问题/circuit.png">
+<meta property="og:image" content="https://linjw1008.top/2019/03/02/基于CHNN的旅行商问题/result.bmp">
+<meta property="og:updated_time" content="2021-01-31T06:38:17.693Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于CHNN的旅行商问题">
+<meta name="twitter:description" content="最近一门人工神经网络的课程结课，利用Matlab做了一个小Project，在此分享。">
+<meta name="twitter:image" content="https://linjw1008.top/2019/03/02/基于CHNN的旅行商问题/circuit.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://linjw1008.top/2019/03/02/基于CHNN的旅行商问题/">
+
+
+
+
+
+  <title>基于CHNN的旅行商问题 | LinJW's Web</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?377ec6b3fde1d4c577a9b9f961073ff7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LinJW's Web</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://linjw1008.top/2019/03/02/基于CHNN的旅行商问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jiawei Lin">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LinJW's Web">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于CHNN的旅行商问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-02T15:05:41+08:00">
+                2019-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近一门人工神经网络的课程结课，利用Matlab做了一个小Project，在此分享。<br><a id="more"></a></p>
+<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>旅行商问题（Travelling salesman problem, TSP）：给定一系列城市和每对城市之间的距离，求解访问每一座城市一次并回到起始城市的最短回路。它是组合优化中的一个NP困难问题，很难通过枚举法求解，特别是在N较大的时候。但是通过神经网络或者其他启发式算法可以较好地解决该问题。</p>
+<h1 id="Hopfield网络"><a href="#Hopfield网络" class="headerlink" title="Hopfield网络"></a>Hopfield网络</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Hopfield神经网络是一种递归神经网络，由约翰·霍普菲尔德等人在1982年发明。Hopfield网络是一种结合存储系统和二元系统的神经网络，有连续型与离散型之分。TSP问题可用连续型Hopfield网络（Continuous Hopfield Neural Network, CHNN）解决，故本文主要介绍CHNN网络。<br>CHNN可由一些简单的电子线路连接起来实现（Fun Fact：发明CHNN网络的人是搞物理的，网络实验也是在物理元件电路上进行的），如图所示，每个神经元均具有连续时间变化的输出值，并采用具有饱和非线性的运算放大器来模拟神经元的S型单调输入——输出关系。<br><img src="circuit.png" alt><br>对节点数量为N的CHNN网络，其神经元状态变量的动态变化可用下述非线性微分方程组来描述</p>
+<script type="math/tex; mode=display">
+\begin{align}
+&c_i\frac{du_i}{dt}=\sum_{j=1}^{N}T_{ij}v_{j}-\frac{u_i}{R_i}+I_i, i=1,2,3,......,N\\
+&v_i=f_i(u_i), i=1,2,3,......,N
+\end{align}</script><p>其中，$f(x)$为激励函数，$f(x)=\frac{1}{2}[1+tanh(\frac{x}{x_0})]$。<br>定义能量函数</p>
+<script type="math/tex; mode=display">E=-\frac{1}{2}\sum_{i=1}^{N}\sum_{j=1, j\neq i}^{N}T_{ij}v_iv_j-\sum_{i=1}^{N}v_iI_i+\sum_{i=1}^{N}\frac{1}{R_i}\int_0^{v_i}f^{-1}(v)dv</script><p>CHNN能量函数的表达形式与物理意义的能量函数一致，用于表征网络状态的变化趋势。</p>
+<h2 id="两个结论"><a href="#两个结论" class="headerlink" title="两个结论"></a>两个结论</h2><p>并有如下结论（详细推导过程不赘述）</p>
+<ul>
+<li>结论1：$\frac{\partial E}{\partial v_i}=-C_i\frac{\partial u_i}{\partial t}$</li>
+<li>结论2：若函数$f(v)$是单调递增且连续的，并有$C<em>i&gt;0，T</em>{ij}=T_{ji}$，则随着网络状态的变化，有$\frac{\partial E}{\partial t}≤0$，当且仅当$\frac{\partial v_i}{\partial t}=0$时，$\frac{\partial E}{\partial t}=0$。</li>
+</ul>
+<h1 id="利用CHNN求解TSP问题"><a href="#利用CHNN求解TSP问题" class="headerlink" title="利用CHNN求解TSP问题"></a>利用CHNN求解TSP问题</h1><h2 id="置换矩阵"><a href="#置换矩阵" class="headerlink" title="置换矩阵"></a>置换矩阵</h2><p>由于问题中要求每个城市要求均需访问一次且不重复，故采用置换矩阵表示路径顺序。</p>
+<ul>
+<li>置换矩阵<br>矩阵的每一行表示一个城市，每一列表示访问的顺序，用元素“1”表示访问，元素“0”表示没有访问。</li>
+</ul>
+<h2 id="求解思路"><a href="#求解思路" class="headerlink" title="求解思路"></a>求解思路</h2><p>基于以上结论，若将最优化问题的目标函数转换成网络的能量函数，把问题变量对应于网络状态，则可将CHNN网络用于解决优化组合问题。<br>在实际求解时，可根据状态方程反推出网络的结构，即$T_{ij}$、$I_i$等参数，然后在确定的网络下进行迭代求解。但当问题较为复杂时，往往比较难通过状态方程反推出网络结构，这时可利用上述重要结论，首先为网络输出赋初值，然后在每次迭代时求出状态方程的增量进行叠加，使网络的输出逐渐收敛。</p>
+<h2 id="能量函数"><a href="#能量函数" class="headerlink" title="能量函数"></a>能量函数</h2><p>TSP问题所用的能量函数可包含约束项和优化项。</p>
+<ul>
+<li>约束项<br>约束项主要保证每个城市均被访问且只能被访问1次，即输出矩阵为置换矩阵。可用数学形式表示如下<script type="math/tex; mode=display">E_1=\frac{A}{2}\sum_{x=1}^{N}\sum_{i=1}^{N-1}\sum_{j=i+1}^{N}v_{xi}v_{xj}
++\frac{B}{2}\sum_{i=1}^{N}\sum_{x=1}^{N-1}\sum_{y=x+1}^{N}v_{xi}v_{yi}
++\frac{C}{2}(\sum_{x=1}^{N}\sum_{i=1}^{N}v_{xi}-N)^2</script></li>
+<li>优化项<br>优化项使得总路程往最小化的方向变化。可表示如下<script type="math/tex; mode=display">E_2=\frac{D}{2}\sum_{x=1}^{N}\sum_{y\neq x}^{N}\sum_{i=1}^{N}d_{xy}v_{xi}(v_{y,i+1}+v_{y,i-1})</script></li>
+<li>总能量函数<br>总的能量函数为<script type="math/tex; mode=display">\begin{align}
+E=&\frac{A}{2}\sum_{x=1}^{N}\sum_{i=1}^{N-1}\sum_{j=i+1}^{N}v_{xi}v_{xj} \\
+&+\frac{B}{2}\sum_{i=1}^{N}\sum_{x=1}^{N-1}\sum_{y=x+1}^{N}v_{xi}v_{yi} \\
+&+\frac{C}{2}(\sum_{x=1}^{N}\sum_{i=1}^{N}v_{xi}-N)^2 \\
+&+\frac{D}{2}\sum_{x=1}^{N}\sum_{y\neq x}^{N}\sum_{i=1}^{N}d_{xy}v_{xi}(v_{y,i+1}+v_{y,i-1}) \\
+&+\sum_{x=1}^{N}\sum_{i=1}^{N}\frac{1}{R_{xi}}\int_0^{v_{xi}}f^{-1}(v)dv
+\end{align}</script></li>
+</ul>
+<h2 id="动态方程"><a href="#动态方程" class="headerlink" title="动态方程"></a>动态方程</h2><p>根据结论1，可得到以下动态方程，该方程用于每次迭代时更新状态变量。</p>
+<script type="math/tex; mode=display">\begin{align}
+c_{xi}\frac{du_{xi}}{dt}&=-\frac{\partial E}{\partial v_{xi}}\\
+&=-\frac{u_{xi}}{R_{xi}}-\frac{A}{2}\sum_{j=1,j\neq i}^{N}v_{xj}-\frac{B}{2}\sum_{y=1,y\neq x}^{N}y_{yi} \\
+&-C[\sum_{x=1}^{N}\sum_{i=1}^{N}v_{xi}-N]-\frac{D}{2}\sum_{y=1,y\neq x}^{N}d_{xy}[v_{y,i+1}+v_{y,i-1}]
+\end{align}</script><h1 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h1><h2 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h2><ol>
+<li>状态变量初始化<br>首先，按照下式为各状态变量赋随机初值<script type="math/tex; mode=display">u_{xi}(t_0)=\frac{1}{2}u_0ln(N-1)+\Delta u_{xi}</script>其中，$\Delta  u_{xi}$取区间$(-1,+1)$内的随机值。</li>
+<li>计算神经元输出<br>根据激励函数计算神经元的输出<script type="math/tex; mode=display">v_{xi}(t_0+k\Delta  t)=f[u_{xi}(t_0+k\Delta t)]=\frac{1}{2}{1+tanh[\frac{u_{xi}(t_0+k\Delta t)}{u_{0}}]}</script></li>
+<li>计算状态变量增量<br>得到神经元的输出后，可继续计算状态变量的增量<script type="math/tex; mode=display">\begin{align}
+c_{xi}\frac{du_{xi}}{dt}=&-\frac{u_{xi}(t_0+k\Delta  t)}{R_{xi}}- \\
+&-\frac{A}{2}\sum_{j=1,j\neq i}^{N}v_{xj}(t_0+k\Delta  t) \\
+&-\frac{B}{2}\sum_{y=1,y\neq x}^{N}y_{yi}(t_0+k\Delta  t) \\
+&-C[\sum_{x=1}^{N}\sum_{i=1}^{N}v_{xi}(t_0+k\Delta  t)-N] \\
+&-\frac{D}{2}\sum_{y=1,y\neq x}^{N}d_{xy}[v_{y,i+1}(t_0+k\Delta  t)+v_{y,i-1}(t_0+k\Delta  t)]
+\end{align}</script></li>
+<li>计算新的状态变量<br>将状态变量与上一时刻的状态变量叠加得到新的状态变量。</li>
+<li>计算能量<br>根据新的状态变量和神经元输出，代入网络能量表达式计算得到本次迭代后的能量。</li>
+<li>判断是否满足终止条件<br>当能量值不再变化或者迭代次数达到最大值时，则满足迭代收敛条件。但在实际操作中，能量值很难满足完全不变的要求，为提高求解效率，可计算两次迭代之间的能量变化量，当变化率小于某一阈值时认为能量不变。<br>若满足迭代终止条件，则进入下一步骤，否则返回步骤2继续迭代。</li>
+<li>检查解是否满足要求<br>检查解是否满足输出矩阵为置换矩阵，若不满足要求，则返回步骤1，否则输出求解结果。</li>
+</ol>
+<h2 id="源代码"><a href="#源代码" class="headerlink" title="源代码"></a>源代码</h2><p>请见Github：<br><a href="https://github.com/linjw1008/TSP_MATLAB" target="_blank" rel="noopener">https://github.com/linjw1008/TSP_MATLAB</a><br>相关参数可以微调，达到更好的求解效果。</p>
+<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p><img src="result.bmp" alt></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢打赏</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Jiawei Lin 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/人工神经网络/" rel="tag"># 人工神经网络</a>
+          
+            <a href="/tags/Matlab/" rel="tag"># Matlab</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/21/Keil开发环境build报错解决方法A1067E/" rel="prev" title="Keil开发环境build报错解决方法A1067E">
+                Keil开发环境build报错解决方法A1067E <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Jiawei Lin">
+            
+              <p class="site-author-name" itemprop="name">Jiawei Lin</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hopfield网络"><span class="nav-number">2.</span> <span class="nav-text">Hopfield网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两个结论"><span class="nav-number">2.2.</span> <span class="nav-text">两个结论</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#利用CHNN求解TSP问题"><span class="nav-number">3.</span> <span class="nav-text">利用CHNN求解TSP问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#置换矩阵"><span class="nav-number">3.1.</span> <span class="nav-text">置换矩阵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求解思路"><span class="nav-number">3.2.</span> <span class="nav-text">求解思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#能量函数"><span class="nav-number">3.3.</span> <span class="nav-text">能量函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态方程"><span class="nav-number">3.4.</span> <span class="nav-text">动态方程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法实现"><span class="nav-number">4.</span> <span class="nav-text">算法实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#算法流程"><span class="nav-number">4.1.</span> <span class="nav-text">算法流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源代码"><span class="nav-number">4.2.</span> <span class="nav-text">源代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行结果"><span class="nav-number">4.3.</span> <span class="nav-text">运行结果</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jiawei Lin</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
